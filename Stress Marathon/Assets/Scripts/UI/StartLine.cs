@@ -3,14 +3,14 @@ using UnityEngine.Serialization;
 
 public class StartLine : MonoBehaviour
 {
-    [SerializeField] private LayerMask _playerLayer;
+    [FormerlySerializedAs("_playerLayer")] [SerializeField] private LayerMask _entry;
     [SerializeField] GameObject _raceBoard;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (_playerLayer.Contains(collision.gameObject))
+        if (_entry.Contains(collision.gameObject))
         {
-            _raceBoard.SetActive(true);
+            GameManager.IsRacing = true;
         }
     }
 }
