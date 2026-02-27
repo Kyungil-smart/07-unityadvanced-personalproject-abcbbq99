@@ -9,9 +9,7 @@ public class RaceBoard : MonoBehaviour
     [SerializeField] TextMeshProUGUI _timerText;
     
     [SerializeField] PlayerController _player;
-
-    private bool _isRacing;
-
+    
     private float _time;
     
     private void Awake()
@@ -21,7 +19,7 @@ public class RaceBoard : MonoBehaviour
 
     private void OnEnable()
     {
-        _isRacing = true;
+        GameManager.IsRacing = true;
     }
 
     private void Update()
@@ -43,7 +41,7 @@ public class RaceBoard : MonoBehaviour
 
     private void RunTimer()
     {
-        if(!_isRacing) return;
+        if(!GameManager.IsRacing) return;
         _time += Time.deltaTime;
     }
 

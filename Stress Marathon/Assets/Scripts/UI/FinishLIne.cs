@@ -11,6 +11,7 @@ public class FinishLIne : MonoBehaviour
     {
         if (_entry.Contains(collision.gameObject))
         {
+            GameManager.IsRacing = false;
             _finish_UI.SetActive(true);
         }
     }
