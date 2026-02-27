@@ -3,16 +3,16 @@ using UnityEngine;
 public class AirState : IState
 {
     private PlayerController _player;
-    private EnemyController _enemy;
+    private RunnerController _runner;
     
     public AirState(PlayerController player)
     {
         _player = player;
     }
     
-    public AirState(EnemyController enemy)
+    public AirState(RunnerController runner)
     {
-        _enemy = enemy;
+        _runner = runner;
     }
     
     public void Enter()
@@ -23,7 +23,7 @@ public class AirState : IState
             Debug.Log("AirState");
         }
 
-        if (_enemy != null)
+        if (_runner != null)
         {
             
         }
@@ -45,7 +45,7 @@ public class AirState : IState
             }
         }
 
-        if (_enemy != null)
+        if (_runner != null)
         {
             
         }
@@ -58,7 +58,7 @@ public class AirState : IState
             _player.SetAir(false);
         }
 
-        if (_enemy != null)
+        if (_runner != null)
         {
             
         }

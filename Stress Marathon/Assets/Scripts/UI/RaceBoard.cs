@@ -16,12 +16,7 @@ public class RaceBoard : MonoBehaviour
     {
         _time = 0f;
     }
-
-    private void OnEnable()
-    {
-        GameManager.IsRacing = true;
-    }
-
+    
     private void Update()
     {
         TimerUI();

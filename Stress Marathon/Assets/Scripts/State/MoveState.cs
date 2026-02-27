@@ -3,16 +3,16 @@ using UnityEngine;
 public class MoveState : IState
 {
     private PlayerController _player;
-    private EnemyController _enemy;
+    private RunnerController _runner;
     
     public MoveState(PlayerController player)
     {
         _player = player;
     }
     
-    public MoveState(EnemyController enemy)
+    public MoveState(RunnerController runner)
     {
-        _enemy = enemy;
+        _runner = runner;
     }
     
     public void Enter()
@@ -22,7 +22,7 @@ public class MoveState : IState
             Debug.Log("MoveState");
         }
 
-        if (_enemy != null)
+        if (_runner != null)
         {
             
         }
@@ -44,7 +44,7 @@ public class MoveState : IState
             }
         }
 
-        if (_enemy != null)
+        if (_runner != null)
         {
             
         }
@@ -57,7 +57,7 @@ public class MoveState : IState
             
         }
 
-        if (_enemy != null)
+        if (_runner != null)
         {
             
         }
