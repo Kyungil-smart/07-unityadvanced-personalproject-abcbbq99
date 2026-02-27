@@ -2,6 +2,8 @@ using UnityEngine;
 
 public abstract class Runner : MonoBehaviour
 {
+    protected string _runnerName;
+    
     [SerializeField] protected float _moveSpeed = 10f;
     [SerializeField] protected float _jumpForce = 13f;
     
@@ -34,7 +36,7 @@ public abstract class Runner : MonoBehaviour
         _stateMachine.Update();
     }
 
-    private void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         Movement();
         if (JumpInput)
@@ -75,7 +77,7 @@ public abstract class Runner : MonoBehaviour
     public bool IsGrounded()
     {
         Ray2D ray = new Ray2D(transform.position, Vector2.down);
-        if(Physics2D.Raycast(ray.origin, ray.direction, _groundCheckDistance, LayerMask.GetMask("Ground")))
+        if(Physics2D.Raycast(ray.origin, ray.direction, _groundCheckDistance, _groundLayer))
         {
             return true;
         }

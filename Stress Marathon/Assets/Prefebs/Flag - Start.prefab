@@ -139,6 +139,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54041c2141cc35b4ca06151596193fa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StartLine
+  _entry:
+    serializedVersion: 2
+    m_Bits: 0
+  _raceBoard: {fileID: 0}
 --- !u!95 &6960671442550990545
 Animator:
   serializedVersion: 7
@@ -206,8 +210,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 265714175
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 0}

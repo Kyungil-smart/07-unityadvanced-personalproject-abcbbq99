@@ -6,6 +6,7 @@ TagManager:
   tags:
   - FinishLine
   - StartLine
+  - NPC
   layers:
   - Default
   - TransparentFX
@@ -42,6 +43,18 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 3440645535
+    locked: 0
+  - name: Runner_NPC
+    uniqueID: 1095046471
+    locked: 0
+  - name: Runner_Player
+    uniqueID: 2853742885
+    locked: 0
+  - name: Top
+    uniqueID: 265714175
     locked: 0
   m_RenderingLayers:
   - Default
