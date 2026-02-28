@@ -25,6 +25,8 @@ public class IdleState : IState
         {
             _runner.ChangeState(_runner.Move);
         }
+        
+        if(_runner.IsHit) _runner.ChangeState(_runner.Hit);
     }
 
     public void Exit()
