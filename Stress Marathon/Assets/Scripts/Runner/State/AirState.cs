@@ -26,6 +26,8 @@ public class AirState : IState
             }
             _runner.ChangeState(_runner.Idle);
         }
+        
+        if(_runner.IsHit) _runner.ChangeState(_runner.Hit);
     }
 
     public void Exit()

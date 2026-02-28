@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Random = UnityEngine.Random;
+
 
 public class RunnerSpawner : MonoBehaviour
 {
@@ -11,7 +13,9 @@ public class RunnerSpawner : MonoBehaviour
     {
         for (int i = 0; i < _runnerNum; i++)
         {
-            Instantiate(_runnerObj, transform.position, transform.rotation);
+            GameObject newNPC = Instantiate(_runnerObj, transform.position, transform.rotation);
+            Runner runner = newNPC.GetComponent<Runner>();
+            runner.RunnerName = "NPC" + Random.Range(100, 999);
         }
     }
 }
