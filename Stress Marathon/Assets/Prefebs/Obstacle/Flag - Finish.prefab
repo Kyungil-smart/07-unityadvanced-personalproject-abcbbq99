@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 424521899917049351}
   - component: {fileID: 8525077841796778292}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 6960671442550990545}
   - component: {fileID: 9094938378760796144}
   - component: {fileID: 1299062106931780901}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Flag - Finish
   m_TagString: FinishLine
   m_Icon: {fileID: 0}

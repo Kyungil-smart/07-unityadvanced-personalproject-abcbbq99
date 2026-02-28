@@ -3,7 +3,7 @@ using UnityEngine;
 
 public abstract class Runner : MonoBehaviour
 {
-    protected string _runnerName;
+    public string RunnerName {get; set;}
     
     [SerializeField] protected float _moveSpeed = 10f;
     [SerializeField] protected float _jumpForce = 13f;
@@ -13,6 +13,7 @@ public abstract class Runner : MonoBehaviour
     [SerializeField] protected float _groundCheckDistance = 0.75f;
     
     private StateMachine _stateMachine;
+    private RaceBoard _raceBoard;
     public IdleState Idle {get; protected set;}
     public MoveState Move {get; protected set;}
     public AirState Air {get; protected set;}
@@ -35,6 +36,7 @@ public abstract class Runner : MonoBehaviour
     {
         IsHit = false;
         _stateMachine.ChangeState(Idle);
+        AddEntry(this);
     }
     
     private void Update()
@@ -62,6 +64,12 @@ public abstract class Runner : MonoBehaviour
         
         Rb = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
+    }
+
+    private void AddEntry(Runner runner)
+    {
+        _raceBoard = FindFirstObjectByType<RaceBoard>();
+        _raceBoard.AddRunner(runner);
     }
     
     private void Movement()

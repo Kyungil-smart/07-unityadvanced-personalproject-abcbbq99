@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8978406909979186086}
   - component: {fileID: 1373875328524610050}
   - component: {fileID: 4279953877774643785}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: RollingSaw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
