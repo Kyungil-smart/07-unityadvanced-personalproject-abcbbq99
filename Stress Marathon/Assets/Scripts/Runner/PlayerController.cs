@@ -10,7 +10,7 @@ public class PlayerController : Runner
     {
         base.Awake();
         _input = new PlayerInputActions();
-        _runnerName = "Player";
+        RunnerName = "Player";
     }
     
     private void OnEnable()

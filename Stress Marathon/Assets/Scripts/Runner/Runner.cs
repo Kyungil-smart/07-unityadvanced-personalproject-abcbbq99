@@ -1,25 +1,31 @@
+using System.Collections;
 using UnityEngine;
 
 public abstract class Runner : MonoBehaviour
 {
-    protected string _runnerName;
+    public string RunnerName {get; set;}
     
     [SerializeField] protected float _moveSpeed = 10f;
     [SerializeField] protected float _jumpForce = 13f;
+    [SerializeField] protected float _hitDrunkTime = 0.5f;
     
     [SerializeField] protected LayerMask _groundLayer;
     [SerializeField] protected float _groundCheckDistance = 0.75f;
     
     private StateMachine _stateMachine;
+    private RaceBoard _raceBoard;
     public IdleState Idle {get; protected set;}
     public MoveState Move {get; protected set;}
     public AirState Air {get; protected set;}
+    public HitState Hit {get; protected set;}
     
     public float MoveInput { get; protected set; }
     public bool JumpInput { get; protected set; }
+    public bool IsHit;
     
     public Rigidbody2D Rb { get; protected set; }
     protected Animator _animator;
+    public Coroutine HitCoroutine;
     
     protected virtual void Awake()
     {
@@ -28,7 +34,9 @@ public abstract class Runner : MonoBehaviour
     
     protected virtual void Start()
     {
+        IsHit = false;
         _stateMachine.ChangeState(Idle);
+        AddEntry(this);
     }
     
     private void Update()
@@ -52,18 +60,27 @@ public abstract class Runner : MonoBehaviour
         Idle = new IdleState(this);
         Move = new MoveState(this);
         Air = new AirState(this);
+        Hit = new HitState(this);
         
         Rb = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
     }
+
+    private void AddEntry(Runner runner)
+    {
+        _raceBoard = FindFirstObjectByType<RaceBoard>();
+        _raceBoard.AddRunner(runner);
+    }
     
     private void Movement()
     {
+        if(IsHit) return;
         Rb.linearVelocity = new Vector2(MoveInput * _moveSpeed, Rb.linearVelocity.y);
     }
 
     private void InvokeJump()
     {
+        if(IsHit) return;
         if(!IsGrounded()) return;
         Rb.linearVelocity = new Vector2(Rb.linearVelocity.x, _jumpForce);
     }
@@ -89,6 +106,18 @@ public abstract class Runner : MonoBehaviour
     {
         _stateMachine.ChangeState(state);
     }
+
+    public void SetHitRecovery()
+    {
+        HitCoroutine = StartCoroutine(HitRecoveryCoroutine(_hitDrunkTime));
+        HitCoroutine = null;
+    }
+    
+    public IEnumerator HitRecoveryCoroutine(float time)
+    {
+        yield return YieldContainer.WaitForSeconds(time);
+        IsHit = false;
+    }
     
     // 애니메이션 설정
     public void SetMoveVelocity(float velocity)
@@ -104,5 +133,10 @@ public abstract class Runner : MonoBehaviour
     public void SetAir(bool value)
     {
         _animator.SetBool("Air", value);
+    }
+    
+    public void SetHit(bool value)
+    {
+        _animator.SetBool("Hit", value);
     }
 }

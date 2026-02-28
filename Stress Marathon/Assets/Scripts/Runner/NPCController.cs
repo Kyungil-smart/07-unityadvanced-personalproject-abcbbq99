@@ -49,7 +49,11 @@ public class NPCController : Runner
     
     void NPCAutoMovement()
     {
-        if(!GameManager.IsRacing) return;
+        if (!GameManager.IsRacing)
+        {
+            MoveInput = 0f;
+            return;
+        }
         if (_isOrder) return;
         Ray2D ray = new Ray2D(transform.position, Vector2.right);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, _wallCheakDistance, _groundLayer);
@@ -68,7 +72,6 @@ public class NPCController : Runner
     void NPCAutoCliffJump()
     {
         if(!GameManager.IsRacing) return;
-        
         Vector2 pos;
         
         switch (MoveInput)
