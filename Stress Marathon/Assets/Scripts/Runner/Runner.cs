@@ -26,7 +26,7 @@ public abstract class Runner : MonoBehaviour
         Init();
     }
     
-    private void Start()
+    protected virtual void Start()
     {
         _stateMachine.ChangeState(Idle);
     }

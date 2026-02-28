@@ -21,12 +21,13 @@ public class NPCController : Runner
     private Vector2 _rightDown = new Vector2(1,-1).normalized;
     private Vector2 _leftDown = new Vector2(-1,-1).normalized;
     
-    void Start()
+    protected override void Start()
     {
         _isOrder = false;
         _moveSpeed = Random.Range(8f, 11f);
         SetNPCColor();
         _currentCoroutine = null;
+        base.Start();
     }
 
     protected override void FixedUpdate()
