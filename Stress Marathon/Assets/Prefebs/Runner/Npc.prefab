@@ -174,7 +174,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPCController
   _moveSpeed: 10
   _jumpForce: 13
-  _hitDrunkTime: 0.5
+  _hitDrunkTime: 3
   _groundLayer:
     serializedVersion: 2
     m_Bits: 192
@@ -185,6 +185,8 @@ MonoBehaviour:
   _wallJumpCheakDistance: 2
   _wallJumpHightCheakDistance: 5.5
   _backwardTime: 0.5
+  _stuckThreshold: 0.1
+  _stuckLimitTime: 1
 --- !u!70 &6981700435425830004
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

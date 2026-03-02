@@ -10,32 +10,43 @@ public class NPCController : Runner
     [SerializeField] float _wallJumpCheakDistance;
     [SerializeField] float _wallJumpHightCheakDistance;
     [SerializeField] float _backwardTime;
+    [SerializeField] private float _stuckThreshold;
+    [SerializeField] private float _stuckLimitTime;
     
     private MaterialPropertyBlock _propBlock;
     private SpriteRenderer _renderer;
-    private Coroutine _currentCoroutine;
-    private bool _isOrder;
+    private Coroutine _orderCoroutine;
+    private bool _isOrder => _orderCoroutine != null? true : false;
+    private float _stuckTimer;
     
     private Vector2 _rightUp = new Vector2(1.5f, 5.0f).normalized;
     private Vector2 _leftUp = new Vector2(-1.5f, 5.0f).normalized;
     private Vector2 _rightDown = new Vector2(1,-1).normalized;
     private Vector2 _leftDown = new Vector2(-1,-1).normalized;
+    private Vector2 _lastPos;
     
     protected override void Start()
     {
-        _isOrder = false;
-        _moveSpeed = Random.Range(8f, 11f);
-        SetNPCColor();
-        _currentCoroutine = null;
         base.Start();
+        StartCoroutine(ChangeMoveSpeedCoroutine());
+        SetNPCColor();
+        _orderCoroutine = null;
+        _stuckTimer = _stuckLimitTime;
     }
-
+    
     protected override void FixedUpdate()
     {
         NPCAutoMovement();
         NPCAutoCliffJump();
         NPCAutoWallJump();
         base.FixedUpdate();
+        SaveLastPosition();
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        CountStuckTime();
     }
 
     void SetNPCColor()
@@ -54,19 +65,21 @@ public class NPCController : Runner
             MoveInput = 0f;
             return;
         }
-        if (_isOrder) return;
+        
         Ray2D ray = new Ray2D(transform.position, Vector2.right);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, _wallCheakDistance, _groundLayer);
         
         if (hit.collider != null)
         {
-            _currentCoroutine = StartCoroutine(BackwardCoroutine(_backwardTime));
-            _currentCoroutine = null;
+            BackwardOrder(_backwardTime);
         }
         else
         {
+            if (_isOrder) return;
             MoveInput = 1f;
         }
+        
+        Debug.Log(MoveInput);
     }
     
     void NPCAutoCliffJump()
@@ -135,6 +148,27 @@ public class NPCController : Runner
         ChangeJumpForce(jumpForce);
         JumpInput = true;
     }
+
+    void CountStuckTime()
+    {
+        if(!GameManager.IsRacing) return;
+        if(IsHit) return;
+        
+        float moveDistance = Mathf.Abs(transform.position.x - _lastPos.x);
+        
+        if(moveDistance <= _stuckThreshold) _stuckTimer -= Time.deltaTime;
+        
+        if (_stuckTimer <= 0f)
+        {
+            BackwardOrder(_backwardTime);
+            _stuckTimer = _stuckLimitTime;
+        }
+    }
+
+    void SaveLastPosition()
+    {
+        _lastPos = transform.position;
+    }
     
     public void ChangeJumpForce(float value = 13f)
     {
@@ -143,40 +177,48 @@ public class NPCController : Runner
     
     public void BackwardOrder(float backwardTime)
     {
-        StopCoroutine(_currentCoroutine);
-        _currentCoroutine = null;
-        StartCoroutine(BackwardCoroutine(backwardTime));
-        _currentCoroutine = null;
+        if (_orderCoroutine != null)
+        {
+            StopCoroutine(_orderCoroutine);
+        }
+        _orderCoroutine = StartCoroutine(BackwardCoroutine(backwardTime));
     }
     
     public void StopOrder(float stopTime)
     {
-        StopCoroutine(_currentCoroutine);
-        _currentCoroutine = null;
-        StartCoroutine(StopOrderCoroutine(stopTime));
-        _currentCoroutine = null;
+        if (_orderCoroutine != null)
+        {
+            StopCoroutine(_orderCoroutine);
+        }
+        _orderCoroutine = StartCoroutine(StopOrderCoroutine(stopTime));
     }
 
     public void JumpOrder(float jumpForce = 13f)
     {
         NPCJump(jumpForce);
     }
+
+    IEnumerator ChangeMoveSpeedCoroutine()
+    {
+        _moveSpeed = Random.Range(8f, 11f);
+        float delayTime = Random.Range(10f, 30f);
+        yield return YieldContainer.WaitForSeconds(delayTime);
+        StartCoroutine(ChangeMoveSpeedCoroutine());
+    }
     
     IEnumerator BackwardCoroutine(float backwardTime)
     {
-        if (_currentCoroutine != null) yield break;
-        _isOrder = true;
+        if (_orderCoroutine != null) yield break;
         MoveInput = -1f;
         yield return YieldContainer.WaitForSeconds(backwardTime);
-        _isOrder = false;
+        _orderCoroutine = null;
     }
     
     IEnumerator StopOrderCoroutine(float stopTime)
     {
-        if (_currentCoroutine != null) yield break;
-        _isOrder = true;
+        if (_orderCoroutine != null) yield break;
         MoveInput = 0f;
         yield return YieldContainer.WaitForSeconds(stopTime);
-        _isOrder = false;
+        _orderCoroutine = null;
     }
 }

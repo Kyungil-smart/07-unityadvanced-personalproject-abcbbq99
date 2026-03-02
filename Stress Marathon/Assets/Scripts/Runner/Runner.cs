@@ -7,7 +7,7 @@ public abstract class Runner : MonoBehaviour
     
     [SerializeField] protected float _moveSpeed = 10f;
     [SerializeField] protected float _jumpForce = 13f;
-    [SerializeField] protected float _hitDrunkTime = 0.5f;
+    [SerializeField] protected float _hitDrunkTime = 3f;
     
     [SerializeField] protected LayerMask _groundLayer;
     [SerializeField] protected float _groundCheckDistance = 0.75f;
@@ -39,7 +39,7 @@ public abstract class Runner : MonoBehaviour
         AddEntry(this);
     }
     
-    private void Update()
+    protected virtual void Update()
     {
         _stateMachine.Update();
     }
@@ -51,6 +51,22 @@ public abstract class Runner : MonoBehaviour
         { 
             JumpInput = false;
             InvokeJump();
+        }
+    }
+    
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Platform"))
+        {
+            transform.SetParent(collision.transform);
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Platform"))
+        {
+            transform.SetParent(null);
         }
     }
     

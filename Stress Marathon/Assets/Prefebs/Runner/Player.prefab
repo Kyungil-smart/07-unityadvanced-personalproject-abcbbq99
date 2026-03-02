@@ -313,7 +313,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   _moveSpeed: 10
   _jumpForce: 13
-  _hitDrunkTime: 0.5
+  _hitDrunkTime: 3
   _groundLayer:
     serializedVersion: 2
     m_Bits: 192
