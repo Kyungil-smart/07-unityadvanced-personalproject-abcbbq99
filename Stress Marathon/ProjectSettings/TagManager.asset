@@ -7,6 +7,7 @@ TagManager:
   - FinishLine
   - StartLine
   - NPC
+  - Platform
   layers:
   - Default
   - TransparentFX
@@ -46,6 +47,12 @@ TagManager:
     locked: 0
   - name: Background
     uniqueID: 3440645535
+    locked: 0
+  - name: Platform
+    uniqueID: 3814629141
+    locked: 0
+  - name: Gruond
+    uniqueID: 988811247
     locked: 0
   - name: Runner_NPC
     uniqueID: 1095046471

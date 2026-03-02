@@ -22,6 +22,12 @@ public class SawSpawner : MonoBehaviour
         DelayCounter();
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, 1f);
+    }
+
     private void DelayCounter()
     {
         _delaytime -= Time.deltaTime;
