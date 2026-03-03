@@ -92,6 +92,7 @@ public abstract class Runner : MonoBehaviour
     {
         if(IsHit) return;
         Rb.linearVelocity = new Vector2(MoveInput * _moveSpeed, Rb.linearVelocity.y);
+        if (GameManager.IsPrized) Rb.linearVelocity = Vector2.zero;
     }
 
     private void InvokeJump()

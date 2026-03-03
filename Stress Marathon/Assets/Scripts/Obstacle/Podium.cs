@@ -23,6 +23,12 @@ public class Podium : MonoBehaviour
         FinishLIne.OnPlayerFinished -= SetupPodium;
     }
 
+    private void Update()
+    {
+        if(!GameManager.IsPrized) return;
+        _camera.transform.position = _camaraPoint.position;
+    }
+
     private void SetupPodium(Dictionary<int, Runner> finalRanks)
     {
         for (int i = 1; i <= 3; i++)
@@ -49,7 +55,7 @@ public class Podium : MonoBehaviour
                 if(spot != null) runner.transform.position = spot.position;
             }
         }
-        _camera.transform.position = _camaraPoint.position;
+        
         _finishUI.SetActive(true);
     }
 }
