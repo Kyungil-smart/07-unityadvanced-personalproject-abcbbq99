@@ -28,19 +28,21 @@ public class PlayerController : Runner
         _input.PlayerActions.Move.performed -= OnMove;
         _input.PlayerActions.Move.canceled -= OnMove;
         _input.PlayerActions.Jump.performed -= OnJump;
-        _input.PlayerActions.Jump.canceled += OnJump;
+        _input.PlayerActions.Jump.canceled -= OnJump;
         
         _input.Disable();
     }
     
     void OnMove(InputAction.CallbackContext ctx)
     {
+        if(GameManager.IsPrized) return;
         Vector2 value = ctx.ReadValue<Vector2>();
         MoveInput = value.x;
     }
 
     void OnJump(InputAction.CallbackContext ctx)
     {
+        if(GameManager.IsPrized) return;
         if(ctx.performed) JumpInput = true;
         if(ctx.canceled) JumpCancel();
     }

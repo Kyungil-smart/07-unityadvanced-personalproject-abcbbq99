@@ -27,5 +27,5 @@ public class SceneLoader : MonoBehaviour
 
 public enum SceneType
 {
-    Title, Race, Prize
+    Title, Race
 }

@@ -60,7 +60,7 @@ TagManager:
   - name: Runner_Player
     uniqueID: 2853742885
     locked: 0
-  - name: Top
+  - name: Foreground
     uniqueID: 265714175
     locked: 0
   m_RenderingLayers:

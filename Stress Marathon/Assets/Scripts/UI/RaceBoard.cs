@@ -16,6 +16,7 @@ public class RaceBoard : MonoBehaviour
 
     private List<Runner> _entryList;
     private Dictionary<Runner, RankSlot> _rankTable;
+    public Dictionary<int, Runner> RankHistory;
     
     private float _time;
     
@@ -24,6 +25,17 @@ public class RaceBoard : MonoBehaviour
         _time = 0f;
         _entryList = new List<Runner>();
         _rankTable = new Dictionary<Runner, RankSlot>();
+        RankHistory = new Dictionary<int, Runner>();
+    }
+
+    private void OnEnable()
+    {
+        FinishLIne.OnRunnerFinished += RecordRank;
+    }
+
+    private void OnDisable()
+    {
+        FinishLIne.OnRunnerFinished -= RecordRank;
     }
 
     private void Update()
@@ -82,5 +94,12 @@ public class RaceBoard : MonoBehaviour
 
             slot.transform.SetSiblingIndex(i);
         }
+    }
+
+    void RecordRank(Runner finishedRunner)
+    {
+        if(RankHistory.ContainsValue(finishedRunner)) return;
+        int rank = RankHistory.Count + 1;
+        RankHistory.Add(rank, finishedRunner);
     }
 }
