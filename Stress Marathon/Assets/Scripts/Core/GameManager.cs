@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     static  GameManager _instance;
     public static bool IsRacing;
+    public static bool IsPrized;
     
     private void Awake()
     {
@@ -25,6 +26,7 @@ public class GameManager : MonoBehaviour
     void Init()
     {
         IsRacing = false;
+        IsPrized = false;
         // 중간 관리자 매니저들
         GenerateManager<AudioManager>();
         GenerateManager<SceneLoader>();

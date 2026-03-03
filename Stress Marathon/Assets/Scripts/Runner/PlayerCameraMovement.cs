@@ -13,6 +13,7 @@ public class PlayerCameraMovement : MonoBehaviour
 
     private void Update()
     {
+        if(!GameManager.IsRacing) return;
         _camera.transform.position = _camaraPoint.transform.position;
     }
 }
