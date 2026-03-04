@@ -13,7 +13,7 @@ public class PlayerCameraMovement : MonoBehaviour
 
     private void Update()
     {
-        if(GameManager.IsPrized) return;
+        if(GameManager.Instance.IsPrized) return;
         _camera.transform.position = _camaraPoint.transform.position;
     }
 }

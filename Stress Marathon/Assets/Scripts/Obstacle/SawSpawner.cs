@@ -41,7 +41,7 @@ public class SawSpawner : MonoBehaviour
 
     private void SetSpawn()
     {
-        if(!GameManager.IsRacing) return;
+        if(!GameManager.Instance.IsRacing) return;
         RollingSaw saw = _rollingSawPool.Spwan();
         saw.OnLifeTimeEnd += ReturnToPool;
         saw.SetUp(transform.position, transform.rotation, _sawLifeTime);

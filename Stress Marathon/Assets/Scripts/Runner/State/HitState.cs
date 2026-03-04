@@ -13,8 +13,6 @@ public class HitState : IState
     
     public void Enter()
     {
-        _runner.SetAirVelocity(0);
-        _runner.SetMoveVelocity(0);
         _runner.SetHit(true);
         _runner.SetHitRecovery();
     }

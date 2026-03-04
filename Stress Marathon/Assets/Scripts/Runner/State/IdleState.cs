@@ -11,8 +11,7 @@ public class IdleState : IState
     
     public void Enter()
     {
-        _runner.SetAirVelocity(0);
-        _runner.SetMoveVelocity(0);
+        Debug.Log("IdleState");
     }
 
     public void Update()
@@ -21,7 +20,7 @@ public class IdleState : IState
         {
             _runner.ChangeState(_runner.Air);
         }
-        else if (Mathf.Abs(_runner.Rb.linearVelocity.x) > 0.1)
+        else if (_runner.MoveInput != 0)
         {
             _runner.ChangeState(_runner.Move);
         }

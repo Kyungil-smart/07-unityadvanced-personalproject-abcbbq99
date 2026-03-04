@@ -20,11 +20,14 @@ public class AirState : IState
             
         if (_runner.IsGrounded())
         {
-            if (Mathf.Abs(_runner.Rb.linearVelocity.x) > 0.1)
+            if (_runner.MoveInput != 0)
             {
                 _runner.ChangeState(_runner.Move);
             }
-            _runner.ChangeState(_runner.Idle);
+            else if (Mathf.Abs(_runner.Rb.linearVelocity.x) < 0.1 && _runner.MoveInput == 0)
+            {
+                _runner.ChangeState(_runner.Idle);
+            }
         }
         
         if(_runner.IsHit) _runner.ChangeState(_runner.Hit);
@@ -33,5 +36,6 @@ public class AirState : IState
     public void Exit()
     {
         _runner.SetAir(false);
+        _runner.SetAirVelocity(0);
     }
 }

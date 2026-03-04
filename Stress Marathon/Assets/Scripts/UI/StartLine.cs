@@ -9,7 +9,7 @@ public class StartLine : MonoBehaviour
     {
         if (_entry.Contains(collision.gameObject))
         {
-            GameManager.IsRacing = true;
+            GameManager.Instance.IsRacing = true;
         }
     }
 }

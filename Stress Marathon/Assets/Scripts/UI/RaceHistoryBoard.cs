@@ -50,8 +50,10 @@ public class RaceHistoryBoard : MonoBehaviour
         }
     }
 
-    private void OnDisable()
+    public void OnClickToMainMenu()
     {
-        
+        SceneLoader.Instance.ConvertScene(SceneType.Title);
+        GameManager.Instance.IsRacing = false;
+        GameManager.Instance.IsPrized = false;
     }
 }

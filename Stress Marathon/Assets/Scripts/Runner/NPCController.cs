@@ -12,6 +12,8 @@ public class NPCController : Runner
     [SerializeField] float _backwardTime;
     [SerializeField] private float _stuckThreshold;
     [SerializeField] private float _stuckLimitTime;
+    [SerializeField] private LayerMask _blockLayer;
+    [SerializeField] private LayerMask _swampLayer;
     
     private MaterialPropertyBlock _propBlock;
     private SpriteRenderer _renderer;
@@ -39,6 +41,7 @@ public class NPCController : Runner
         NPCAutoMovement();
         NPCAutoCliffJump();
         NPCAutoWallJump();
+        NPCAutoSwampJump();
         base.FixedUpdate();
         SaveLastPosition();
     }
@@ -60,14 +63,14 @@ public class NPCController : Runner
     
     void NPCAutoMovement()
     {
-        if (!GameManager.IsRacing)
+        if (!GameManager.Instance.IsRacing)
         {
             MoveInput = 0f;
             return;
         }
         
         Ray2D ray = new Ray2D(transform.position, Vector2.right);
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, _wallCheakDistance, _groundLayer);
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, _wallCheakDistance, _blockLayer);
         
         if (hit.collider != null)
         {
@@ -78,13 +81,11 @@ public class NPCController : Runner
             if (_isOrder) return;
             MoveInput = 1f;
         }
-        
-        Debug.Log(MoveInput);
     }
     
     void NPCAutoCliffJump()
     {
-        if(!GameManager.IsRacing) return;
+        if(!GameManager.Instance.IsRacing) return;
         Vector2 pos;
         
         switch (MoveInput)
@@ -101,7 +102,7 @@ public class NPCController : Runner
         }
         
         Ray2D ray = new Ray2D(transform.position, pos);
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, _cliffJumpCheakDistance, _groundLayer);
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, _cliffJumpCheakDistance, _blockLayer);
         
         if (hit.collider == null && IsGrounded())
         {
@@ -111,7 +112,7 @@ public class NPCController : Runner
 
     void NPCAutoWallJump()
     {
-        if(!GameManager.IsRacing) return;
+        if(!GameManager.Instance.IsRacing) return;
         
         Vector2 pos;
         Vector2 pos2;
@@ -134,14 +135,29 @@ public class NPCController : Runner
         
         Ray2D ray = new Ray2D(transform.position, pos);
         Ray2D ray2 = new Ray2D(transform.position, pos2);
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, _wallJumpCheakDistance, _groundLayer);
-        RaycastHit2D hit2 = Physics2D.Raycast(ray2.origin, ray2.direction, _wallJumpHightCheakDistance, _groundLayer);
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, _wallJumpCheakDistance, _blockLayer);
+        RaycastHit2D hit2 = Physics2D.Raycast(ray2.origin, ray2.direction, _wallJumpHightCheakDistance, _blockLayer);
         
         if (hit.collider != null && hit2.collider == null && IsGrounded())
         {
             NPCJump();
         }
     }
+
+    void NPCAutoSwampJump()
+    {
+        if(!GameManager.Instance.IsRacing) return;
+        
+        Ray2D ray = new Ray2D(transform.position, Vector2.down);
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, _cliffJumpCheakDistance, _swampLayer);
+        
+        if (hit.collider != null && IsGrounded())
+        {
+            NPCJump();
+        }
+    }
+    
+    
 
     void NPCJump(float jumpForce = 13f)
     {
@@ -151,7 +167,7 @@ public class NPCController : Runner
 
     void CountStuckTime()
     {
-        if(!GameManager.IsRacing) return;
+        if(!GameManager.Instance.IsRacing) return;
         if(IsHit) return;
         
         float moveDistance = Mathf.Abs(transform.position.x - _lastPos.x);

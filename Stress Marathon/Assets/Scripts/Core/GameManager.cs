@@ -5,19 +5,19 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    static  GameManager _instance;
-    public static bool IsRacing;
-    public static bool IsPrized;
+    public static GameManager Instance;
+    public bool IsRacing;
+    public bool IsPrized;
     
     private void Awake()
     {
-        if (_instance != null && _instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
 
-        _instance = this;
+        Instance = this;
         DontDestroyOnLoad(gameObject);
         
         Init();

@@ -91,15 +91,22 @@ public abstract class Runner : MonoBehaviour
     private void Movement()
     {
         if(IsHit) return;
-        Rb.linearVelocity = new Vector2(MoveInput * _moveSpeed, Rb.linearVelocity.y);
-        if (GameManager.IsPrized) Rb.linearVelocity = Vector2.zero;
+        
+        float targetVelocityX = MoveInput * _moveSpeed;
+        
+        float velocityChange = targetVelocityX - Rb.linearVelocity.x;
+        
+        Rb.AddForce(new Vector2(velocityChange * Rb.mass, 0), ForceMode2D.Impulse);
+        
+        if (GameManager.Instance.IsPrized) Rb.linearVelocity = Vector2.zero;
     }
 
     private void InvokeJump()
     {
         if(IsHit) return;
         if(!IsGrounded()) return;
-        Rb.linearVelocity = new Vector2(Rb.linearVelocity.x, _jumpForce);
+        
+        Rb.AddForce(Vector2.up * _jumpForce,ForceMode2D.Impulse);
     }
 
     protected void JumpCancel()
@@ -137,14 +144,15 @@ public abstract class Runner : MonoBehaviour
     }
     
     // 애니메이션 설정
-    public void SetMoveVelocity(float velocity)
-    {
-        _animator.SetFloat("xVelocity", Mathf.Abs(velocity));
-    }
     
     public void SetAirVelocity(float velocity)
     {
         _animator.SetFloat("yVelocity", velocity);
+    }
+    
+    public void SetMove(bool value)
+    {
+        _animator.SetBool("Move", value);
     }
     
     public void SetAir(bool value)

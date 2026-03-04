@@ -50,7 +50,7 @@ public class PlatformController : MonoBehaviour
     
     private void Move()
     {
-        if(!GameManager.IsRacing) return;
+        if(!GameManager.Instance.IsRacing) return;
         
         if (_path == null || _path.Count <= 0 || _currentWaypoint > _path.Count - 1) return;
         

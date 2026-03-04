@@ -58,7 +58,7 @@ public class RaceBoard : MonoBehaviour
 
     private void RunTimer()
     {
-        if(!GameManager.IsRacing) return;
+        if(!GameManager.Instance.IsRacing) return;
         _time += Time.deltaTime;
     }
 

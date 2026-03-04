@@ -25,7 +25,7 @@ public class Podium : MonoBehaviour
 
     private void Update()
     {
-        if(!GameManager.IsPrized) return;
+        if(!GameManager.Instance.IsPrized) return;
         _camera.transform.position = _camaraPoint.position;
     }
 

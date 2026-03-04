@@ -35,14 +35,14 @@ public class PlayerController : Runner
     
     void OnMove(InputAction.CallbackContext ctx)
     {
-        if(GameManager.IsPrized) return;
+        if(GameManager.Instance.IsPrized) return;
         Vector2 value = ctx.ReadValue<Vector2>();
         MoveInput = value.x;
     }
 
     void OnJump(InputAction.CallbackContext ctx)
     {
-        if(GameManager.IsPrized) return;
+        if(GameManager.Instance.IsPrized) return;
         if(ctx.performed) JumpInput = true;
         if(ctx.canceled) JumpCancel();
     }

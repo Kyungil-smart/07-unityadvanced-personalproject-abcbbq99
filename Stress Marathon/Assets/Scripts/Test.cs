@@ -8,11 +8,11 @@ public class Test : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            GameManager.IsRacing = true;
+            GameManager.Instance.IsRacing = true;
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            GameManager.IsRacing = false;
+            GameManager.Instance.IsRacing = false;
         }
 
         if (Input.GetKeyDown(KeyCode.Space))

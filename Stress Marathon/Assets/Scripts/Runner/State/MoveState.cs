@@ -11,18 +11,17 @@ public class MoveState : IState
     
     public void Enter()
     {
-        
+        Debug.Log("MoveState");
+        _runner.SetMove(true);
     }
 
     public void Update()
     {
-        _runner.SetMoveVelocity(_runner.Rb.linearVelocity.x);
-            
         if (!_runner.IsGrounded())
         {
             _runner.ChangeState(_runner.Air);
         }
-        else if (Mathf.Abs(_runner.Rb.linearVelocity.x) < 0.1)
+        else if (Mathf.Abs(_runner.Rb.linearVelocity.x) < 0.1 && _runner.MoveInput == 0)
         {
             _runner.ChangeState(_runner.Idle);
         }
@@ -32,6 +31,6 @@ public class MoveState : IState
 
     public void Exit()
     {
-        
+        _runner.SetMove(true);
     }
 }

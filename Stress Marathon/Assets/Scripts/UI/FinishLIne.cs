@@ -29,8 +29,8 @@ public class FinishLIne : MonoBehaviour
     {
         Dictionary<int, Runner> history = _raceBoard.RankHistory;
         
-        GameManager.IsRacing = false;
-        GameManager.IsPrized = true;
+        GameManager.Instance.IsRacing = false;
+        GameManager.Instance.IsPrized = true;
         
         OnPlayerFinished?.Invoke(history);
     }
