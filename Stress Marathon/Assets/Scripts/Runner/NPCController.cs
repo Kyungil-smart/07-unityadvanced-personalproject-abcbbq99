@@ -14,10 +14,13 @@ public class NPCController : Runner
     [SerializeField] private float _stuckLimitTime;
     [SerializeField] private LayerMask _blockLayer;
     [SerializeField] private LayerMask _swampLayer;
+    [SerializeField] private float _spartTime;
+    [SerializeField] private float _spartSpeed;
     
     private MaterialPropertyBlock _propBlock;
     private SpriteRenderer _renderer;
     private Coroutine _orderCoroutine;
+    public Coroutine CurrentSpartCoroutine;
     private bool _isOrder => _orderCoroutine != null? true : false;
     private float _stuckTimer;
     
@@ -33,6 +36,7 @@ public class NPCController : Runner
         StartCoroutine(ChangeMoveSpeedCoroutine());
         SetNPCColor();
         _orderCoroutine = null;
+        CurrentSpartCoroutine = null;
         _stuckTimer = _stuckLimitTime;
     }
     
@@ -61,6 +65,7 @@ public class NPCController : Runner
         _renderer.SetPropertyBlock(_propBlock);
     }
     
+    // NPC 자율 주행
     void NPCAutoMovement()
     {
         if (!GameManager.Instance.IsRacing)
@@ -157,8 +162,6 @@ public class NPCController : Runner
         }
     }
     
-    
-
     void NPCJump(float jumpForce = 13f)
     {
         ChangeJumpForce(jumpForce);
@@ -186,6 +189,7 @@ public class NPCController : Runner
         _lastPos = transform.position;
     }
     
+    // 특정구간에서 발동
     public void ChangeJumpForce(float value = 13f)
     {
         _jumpForce = value;
@@ -214,12 +218,22 @@ public class NPCController : Runner
         NPCJump(jumpForce);
     }
 
-    IEnumerator ChangeMoveSpeedCoroutine()
+    // 코루틴 모음
+    public IEnumerator ChangeMoveSpeedCoroutine()
     {
         _moveSpeed = Random.Range(8f, 11f);
         float delayTime = Random.Range(10f, 30f);
         yield return YieldContainer.WaitForSeconds(delayTime);
         StartCoroutine(ChangeMoveSpeedCoroutine());
+    }
+
+    public IEnumerator SpartCoroutine()
+    {
+        if(CurrentSpartCoroutine != null) yield break;
+        _moveSpeed = _spartSpeed;
+        yield return YieldContainer.WaitForSeconds(_spartTime);
+        StartCoroutine(ChangeMoveSpeedCoroutine());
+        CurrentSpartCoroutine = null;
     }
     
     IEnumerator BackwardCoroutine(float backwardTime)

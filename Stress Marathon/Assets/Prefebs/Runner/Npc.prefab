@@ -206,6 +206,8 @@ MonoBehaviour:
   _swampLayer:
     serializedVersion: 2
     m_Bits: 512
+  _spartTime: 5
+  _spartSpeed: 15
 --- !u!70 &6981700435425830004
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

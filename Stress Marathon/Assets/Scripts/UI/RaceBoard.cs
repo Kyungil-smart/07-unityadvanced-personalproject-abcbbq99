@@ -14,7 +14,7 @@ public class RaceBoard : MonoBehaviour
     
     [SerializeField] PlayerController _player;
 
-    private List<Runner> _entryList;
+    public List<Runner> EntryList { get; private set; }
     private Dictionary<Runner, RankSlot> _rankTable;
     public Dictionary<int, Runner> RankHistory;
     
@@ -23,7 +23,7 @@ public class RaceBoard : MonoBehaviour
     private void Awake()
     {
         _time = 0f;
-        _entryList = new List<Runner>();
+        EntryList = new List<Runner>();
         _rankTable = new Dictionary<Runner, RankSlot>();
         RankHistory = new Dictionary<int, Runner>();
     }
@@ -72,7 +72,7 @@ public class RaceBoard : MonoBehaviour
 
     public void AddRunner(Runner runner)
     {
-        _entryList.Add(runner);
+        EntryList.Add(runner);
         GameObject newRankSlot = Instantiate(_rankSlotPrefab, _RankingBoardContent);
         RankSlot rankSlot = newRankSlot.GetComponent<RankSlot>();
         rankSlot.SetRankSlot(runner);
@@ -81,12 +81,12 @@ public class RaceBoard : MonoBehaviour
 
     void SortRunners()
     {
-        _entryList.Sort((a, b) 
+        EntryList.Sort((a, b) 
             => b.transform.position.x.CompareTo(a.transform.position.x));
 
-        for (int i = 0; i < _entryList.Count; i++)
+        for (int i = 0; i < EntryList.Count; i++)
         {
-            Runner currentRunner = _entryList[i];
+            Runner currentRunner = EntryList[i];
             RankSlot slot = _rankTable[currentRunner];
 
             slot.CurrentRank = i + 1;
