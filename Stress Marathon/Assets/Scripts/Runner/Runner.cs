@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -25,7 +26,10 @@ public abstract class Runner : MonoBehaviour
     
     public Rigidbody2D Rb { get; protected set; }
     protected Animator _animator;
-    public Coroutine HitCoroutine;
+    public AudioSource AudioSource {get; protected set;}
+    
+    public event Action<Runner> OnRunnerJumped;
+    public event Action<Runner> OnRunnerHitted;
     
     protected virtual void Awake()
     {
@@ -38,7 +42,17 @@ public abstract class Runner : MonoBehaviour
         _stateMachine.ChangeState(Idle);
         AddEntry(this);
     }
-    
+
+    protected virtual void OnEnable()
+    {
+        AudioManager.Instance.RunnerEnableEvents(this);
+    }
+
+    protected virtual void OnDisable()
+    {
+        AudioManager.Instance.RunnerDisableEvents(this);
+    }
+
     protected virtual void Update()
     {
         _stateMachine.Update();
@@ -53,7 +67,7 @@ public abstract class Runner : MonoBehaviour
             InvokeJump();
         }
     }
-    
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Platform"))
@@ -80,6 +94,7 @@ public abstract class Runner : MonoBehaviour
         
         Rb = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
+        AudioSource = GetComponent<AudioSource>();
     }
 
     private void AddEntry(Runner runner)
@@ -90,6 +105,7 @@ public abstract class Runner : MonoBehaviour
     
     private void Movement()
     {
+        if(!GameManager.Instance.IsRacing) return;
         if(IsHit) return;
         
         float targetVelocityX = MoveInput * _moveSpeed;
@@ -103,10 +119,12 @@ public abstract class Runner : MonoBehaviour
 
     private void InvokeJump()
     {
+        if(!GameManager.Instance.IsRacing) return;
         if(IsHit) return;
         if(!IsGrounded()) return;
         
         Rb.AddForce(Vector2.up * _jumpForce,ForceMode2D.Impulse);
+        OnRunnerJumped?.Invoke(this);
     }
 
     protected void JumpCancel()
@@ -133,18 +151,17 @@ public abstract class Runner : MonoBehaviour
 
     public void SetHitRecovery()
     {
-        HitCoroutine = StartCoroutine(HitRecoveryCoroutine(_hitDrunkTime));
-        HitCoroutine = null;
+        OnRunnerHitted?.Invoke(this);
+        StartCoroutine(HitRecoveryCoroutine(_hitDrunkTime));
     }
     
-    public IEnumerator HitRecoveryCoroutine(float time)
+    IEnumerator HitRecoveryCoroutine(float time)
     {
         yield return YieldContainer.WaitForSeconds(time);
         IsHit = false;
     }
     
     // 애니메이션 설정
-    
     public void SetAirVelocity(float velocity)
     {
         _animator.SetFloat("yVelocity", velocity);

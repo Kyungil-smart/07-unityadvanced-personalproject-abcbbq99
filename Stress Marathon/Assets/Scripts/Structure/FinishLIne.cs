@@ -27,6 +27,8 @@ public class FinishLIne : MonoBehaviour
     
     private void RaceFinish()
     {
+        AudioManager.Instance.PlayPrizeBGM();
+        
         Dictionary<int, Runner> history = _raceBoard.RankHistory;
         
         GameManager.Instance.IsRacing = false;

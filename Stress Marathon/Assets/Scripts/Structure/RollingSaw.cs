@@ -8,7 +8,9 @@ public class RollingSaw : MonoBehaviour, IPoolable
     [SerializeField] private float _knockbackForce = 15f;
     
     public event Action<RollingSaw> OnLifeTimeEnd;
-    
+    public event Action<RollingSaw> OnSawCollision;
+
+    public AudioSource AudioSource;
     private Rigidbody2D _rb;
     private float _timeCount;
     
@@ -21,16 +23,19 @@ public class RollingSaw : MonoBehaviour, IPoolable
 
     public void OnCreate()
     {
+        AudioSource = GetComponent<AudioSource>();
         _rb = GetComponent<Rigidbody2D>();
     }
 
     public void OnSpawn()
     {
         gameObject.SetActive(true);
+        AudioManager.Instance.SawEnableEvents(this);
     }
 
     public void OnDespawn()
     {
+        AudioManager.Instance.SawDisableEvents(this);
         gameObject.SetActive(false);
     }
 
@@ -59,6 +64,8 @@ public class RollingSaw : MonoBehaviour, IPoolable
 
     private void OnCollisionEnter2D(Collision2D other)
     {
+        OnSawCollision?.Invoke(this);
+        
         if (_entry.Contains(other.collider.gameObject))
         {
             _runner = other.gameObject.GetComponent<Runner>();

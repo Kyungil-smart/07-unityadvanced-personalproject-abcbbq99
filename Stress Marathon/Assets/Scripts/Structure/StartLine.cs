@@ -1,15 +1,21 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public class StartLine : MonoBehaviour
 {
-    [FormerlySerializedAs("_playerLayer")] [SerializeField] private LayerMask _entry;
+    [SerializeField] private LayerMask _entry;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnEnable()
     {
-        if (_entry.Contains(collision.gameObject))
-        {
-            GameManager.Instance.IsRacing = true;
-        }
+        StartCoroutine(RaceStartCoroutine());
+    }
+    
+    IEnumerator RaceStartCoroutine()
+    {
+        AudioManager.Instance.PlayCountdownSfx();
+        yield return YieldContainer.WaitForSeconds(3f);
+        GameManager.Instance.IsRacing = true;
     }
 }

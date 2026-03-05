@@ -11,7 +11,6 @@ public class MoveState : IState
     
     public void Enter()
     {
-        Debug.Log("MoveState");
         _runner.SetMove(true);
     }
 

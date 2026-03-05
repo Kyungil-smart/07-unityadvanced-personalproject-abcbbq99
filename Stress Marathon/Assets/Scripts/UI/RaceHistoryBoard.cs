@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class RaceHistoryBoard : MonoBehaviour
+public class RaceHistoryBoard : MonoBehaviour, IClickAble
 {
     [SerializeField] TextMeshProUGUI _1stName;
     [SerializeField] TextMeshProUGUI _2ndName;
@@ -12,9 +12,13 @@ public class RaceHistoryBoard : MonoBehaviour
     [SerializeField] GameObject _2ndMadel;
     [SerializeField] GameObject _3rdMadel;
     [SerializeField] RaceBoard _raceBoard;
+    
+    public event Action<IClickAble> OnClickSound;
 
     private void OnEnable()
     {
+        AudioManager.Instance.UIEnableEvents(this);
+        
         Dictionary<int, Runner> finalRanks = _raceBoard.RankHistory;
 
         for (int i = 1; i <= 3; i++)
@@ -50,9 +54,16 @@ public class RaceHistoryBoard : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        AudioManager.Instance.UIDisableEvents(this);
+    }
+
     public void OnClickToMainMenu()
     {
+        OnClickSound?.Invoke(this);
         SceneLoader.Instance.ConvertScene(SceneType.Title);
+        AudioManager.Instance.PlayTitleBGM();
         GameManager.Instance.IsRacing = false;
         GameManager.Instance.IsPrized = false;
     }

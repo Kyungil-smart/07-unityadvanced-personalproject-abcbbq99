@@ -13,7 +13,7 @@ public class PlayerController : Runner
         RunnerName = "Player";
     }
     
-    private void OnEnable()
+    protected override void OnEnable()
     {
         _input.Enable();
 
@@ -21,10 +21,14 @@ public class PlayerController : Runner
         _input.PlayerActions.Move.canceled += OnMove;
         _input.PlayerActions.Jump.performed += OnJump;
         _input.PlayerActions.Jump.canceled += OnJump;
+        
+        base.OnEnable();
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
+        
         _input.PlayerActions.Move.performed -= OnMove;
         _input.PlayerActions.Move.canceled -= OnMove;
         _input.PlayerActions.Jump.performed -= OnJump;

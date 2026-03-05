@@ -11,20 +11,32 @@ public class Marker : MonoBehaviour
     [SerializeField] RaceBoard _board;
     [SerializeField] float _summonDelayTime;
     
+    public event Action<Marker> OnBGMPitchChange;
     Coroutine _summonCoroutine;
     
-    public float MarkerPosition { get; private set; }
+    public int MarkerPosition { get; private set; }
 
     private void Awake()
     {
-        MarkerPosition = transform.position.x;
+        MarkerPosition = (int)transform.position.x;
         _summonCoroutine = null;
+    }
+
+    private void OnEnable()
+    {
+        AudioManager.Instance.MarkerEnableEvents(this);
+    }
+
+    private void OnDisable()
+    {
+        AudioManager.Instance.MarkerDisableEvents(this);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (_runnerLayer.Contains(other.gameObject.layer) && other.CompareTag("Player"))
         {
+            OnBGMPitchChange?.Invoke(this);
             _summonCoroutine = StartCoroutine(SummonCoroutine());
         }
     }
@@ -46,5 +58,7 @@ public class Marker : MonoBehaviour
                 }
             }
         }
+        
+        _summonCoroutine = null;
     }
 }
