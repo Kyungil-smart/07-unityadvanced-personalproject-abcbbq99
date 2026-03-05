@@ -51,7 +51,7 @@ public class Podium : MonoBehaviour
                         spot = null;
                         break;
                 }
-                
+                runner.Rb.linearVelocity = Vector2.zero;
                 if(spot != null) runner.transform.position = spot.position;
             }
         }
